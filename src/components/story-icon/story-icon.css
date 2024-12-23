@@ -1,0 +1,27 @@
+.storyItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 5px solid pink;
+  border-radius: 100%;
+  width: 10vh;
+  height: 10vh;
+  max-width: 20vh;
+  max-height: 20vh;
+  overflow: hidden;
+}
+
+.imageNewStory {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  padding: 0.2rem;
+}
+
+.image {
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  padding: 0.2rem;
+  filter: blur(8px);
+}
