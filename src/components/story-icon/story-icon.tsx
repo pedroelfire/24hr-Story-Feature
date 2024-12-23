@@ -5,11 +5,11 @@ interface StoryIconProps {
   isNewStory: boolean
   storyPhotoSrc: string
   onStoryClick?: () => void
-  id: number
-
+  onUpload?: (src: string) => void
 }
 
-function StoryIcon({ isNewStory, storyPhotoSrc, id, onStoryClick }: StoryIconProps) {
+function StoryIcon({ isNewStory, storyPhotoSrc,
+  onStoryClick, onUpload }: StoryIconProps) {
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const handleInputClick = () => {
     if (fileInputRef.current) {
@@ -18,10 +18,14 @@ function StoryIcon({ isNewStory, storyPhotoSrc, id, onStoryClick }: StoryIconPro
   }
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files![0]
+    if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+      alert('Solo se permiten archivos de imagen');
+      return;
+    }
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
-        if (file.size > 1000000) {
+        if (file.size > 3000000) {
           alert('El archivo es muy grande'); return;
         }
         const src = reader.result as string;
@@ -31,20 +35,22 @@ function StoryIcon({ isNewStory, storyPhotoSrc, id, onStoryClick }: StoryIconPro
             [...JSON.parse(stories), src]))
         }
         else localStorage.setItem('stories', JSON.stringify([src]))
+        onUpload!(src)
       }
       reader.readAsDataURL(file);
     }
   }
 
   return (
-    <main id={String(id)}>
+    <main>
       <div className='storyItem'>
         {isNewStory ?
           <div>
             <img className="imageNewStory"
               src='plus.png' alt='Subir historia' onClick={handleInputClick} />
             <input type='file' style={{ display: "none" }}
-              onChange={() => handleFileChange} ref={fileInputRef} />
+              onChange={(e) => handleFileChange(e)} ref={fileInputRef}
+              accept='image/*, video/*, gif/*' />
           </div>
           :
           <img className="image"

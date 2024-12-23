@@ -6,8 +6,6 @@ interface StoryWindowProps {
 }
 
 function StoryWindow({ src, closeStory }: StoryWindowProps) {
-
-
   return (
     <div className='storyWindowContainer'>
       <button className='closeButton' onClick={closeStory}>
