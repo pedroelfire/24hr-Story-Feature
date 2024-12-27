@@ -1,22 +1,16 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  overflow-x: hidden
 }
 
 .storyContainer {
-  position: absolute;
-  top: 0;
-  left: 33%;
   height: 12vh;
-  width: 33%;
-  overflow-x: auto;
-  overflow-y: hidden;
+  margin-top: -50vh;
+  width: 100%;
   display: flex;
   gap: 1rem;
-  border: 2px solid white;
-  border-radius: 15px;
   padding: .8rem;
   scroll-behavior: smooth;
   cursor: grab;
+  overflow-x: auto;
 }

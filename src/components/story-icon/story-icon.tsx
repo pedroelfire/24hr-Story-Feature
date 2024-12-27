@@ -50,7 +50,7 @@ function StoryIcon({ isNewStory, storyPhotoSrc,
               src='plus.png' alt='Subir historia' onClick={handleInputClick} />
             <input type='file' style={{ display: "none" }}
               onChange={(e) => handleFileChange(e)} ref={fileInputRef}
-              accept='image/*, video/*, gif/*' />
+              accept='image/*' />
           </div>
           :
           <img className="image"
