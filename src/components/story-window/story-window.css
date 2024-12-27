@@ -16,6 +16,10 @@
   height: 90%;
   width: 100%;
   object-fit: contain;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  pointer-events: none;
 }
 
 .closeButton {
@@ -35,11 +39,4 @@
   width: 80%;
   margin-left: 3vw;
   margin-top: 2vh;
-}
-
-img {
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-  pointer-events: none;
 }
