@@ -1,14 +1,16 @@
 import React from 'react';
 import './story-icon.css'
+import saveImageInLocal from '../../utils/uploadImage';
 
 interface StoryIconProps {
   isNewStory: boolean
+  seen: boolean
   storyPhotoSrc: string
   onStoryClick?: () => void
   onUpload?: (src: string) => void
 }
 
-function StoryIcon({ isNewStory, storyPhotoSrc,
+function StoryIcon({ isNewStory, seen, storyPhotoSrc,
   onStoryClick, onUpload }: StoryIconProps) {
   const fileInputRef = React.useRef<HTMLInputElement>(null)
   const handleInputClick = () => {
@@ -29,12 +31,7 @@ function StoryIcon({ isNewStory, storyPhotoSrc,
           alert('El archivo es muy grande'); return;
         }
         const src = reader.result as string;
-        const stories = localStorage.getItem('stories')
-        if (stories) {
-          localStorage.setItem('stories', JSON.stringify(
-            [...JSON.parse(stories), src]))
-        }
-        else localStorage.setItem('stories', JSON.stringify([src]))
+        saveImageInLocal(src)
         onUpload!(src)
       }
       reader.readAsDataURL(file);
@@ -43,7 +40,8 @@ function StoryIcon({ isNewStory, storyPhotoSrc,
 
   return (
     <main>
-      <div className='storyItem'>
+      <div className='storyItem'
+        style={{ border: `5px solid ${seen ? 'gray' : 'pink'}` }}>
         {isNewStory ?
           <div>
             <img className="imageNewStory"
@@ -54,9 +52,7 @@ function StoryIcon({ isNewStory, storyPhotoSrc,
           </div>
           :
           <img className="image"
-            onClick={onStoryClick}
-            src={storyPhotoSrc} />}
-      </div>
+            onClick={onStoryClick} src={storyPhotoSrc} />} </div>
     </main>
   )
 }
