@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './story-window.css'
 
 interface StoryWindowProps {
@@ -38,6 +38,7 @@ function StoryWindow({ src, closeStory }: StoryWindowProps) {
         X</button>
       <progress className='progressBar' value={barValue} max="100"></progress>
       <img className='imageContainer' src={src}
+        onContextMenu={(e) => e.preventDefault()}
         onMouseDown={() => setIsMouseDown(true)}
         onMouseUp={() => setIsMouseDown(false)}
         onTouchStart={() => setIsMouseDown(true)}
