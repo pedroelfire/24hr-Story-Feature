@@ -14,3 +14,12 @@
   cursor: grab;
   overflow-x: auto;
 }
+
+@media (max-width: 720px) {
+  .storyContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 0;
+  }
+}

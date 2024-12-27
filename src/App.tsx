@@ -14,7 +14,6 @@ function App() {
     setShowImage(true)
   }
   const handleNewStory = (src: string) => {
-    console.log(src, "src")
     setStories([...stories, src])
   }
 
