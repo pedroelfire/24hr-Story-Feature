@@ -47,7 +47,7 @@ function StoryWindow({ stories, index, closeStory, sumToIndex }: StoryWindowProp
         X
       </button>
       <div className='progressBar'>
-        {stories.map((story, i: number) => (
+        {stories.map((_, i: number) => (
           <React.Fragment key={i}>
             <progress
               style={{ width: String(100 / stories.length + "%") }}
