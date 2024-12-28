@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './story-window.css'
+import story from '../../types/story'
 
 interface StoryWindowProps {
-  src: string
+  stories: story[]
+  index: number
   closeStory: () => void
+  sumToIndex: () => void
 }
 
-function StoryWindow({ src, closeStory }: StoryWindowProps) {
+function StoryWindow({ stories, index, closeStory, sumToIndex }: StoryWindowProps) {
   const [barValue, setBarValue] = useState(0)
   const [isMouseDown, setIsMouseDown] = useState(false)
 
@@ -28,23 +31,44 @@ function StoryWindow({ src, closeStory }: StoryWindowProps) {
 
   useEffect(() => {
     if (barValue === 100) {
-      closeStory();
+      if (typeof stories[index + 1] != 'undefined') {
+        sumToIndex()
+        setBarValue(0)
+      }
+      else {
+        closeStory()
+      }
     }
-  }, [barValue, closeStory]);
+  }, [barValue, stories, index, closeStory, sumToIndex]);
 
   return (
     <div className='storyWindowContainer'>
       <button className='closeButton' onClick={closeStory}>
-        X</button>
-      <progress className='progressBar' value={barValue} max="100"></progress>
-      <img className='imageContainer' src={src}
+        X
+      </button>
+      <div className='progressBar'>
+        {stories.map((story, i: number) => (
+          <React.Fragment key={i}>
+            <progress
+              style={{ width: String(100 / stories.length + "%") }}
+              value={i === index ? barValue : 0}
+              max="100"
+            ></progress>
+          </React.Fragment>
+        ))}
+      </div>
+      <img
+        className='imageContainer'
+        src={stories[index].src}
         onContextMenu={(e) => e.preventDefault()}
         onMouseDown={() => setIsMouseDown(true)}
         onMouseUp={() => setIsMouseDown(false)}
         onTouchStart={() => setIsMouseDown(true)}
-        onTouchEnd={() => setIsMouseDown(false)} />
+        onTouchEnd={() => setIsMouseDown(false)}
+      />
     </div>
   )
 }
 
 export default StoryWindow
+

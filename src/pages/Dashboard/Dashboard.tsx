@@ -4,18 +4,14 @@ import StoryIcon from '../../components/story-icon/story-icon';
 import StoryWindow from '../../components/story-window/story-window';
 import getImagesInLocal from '../../utils/getImages';
 import setStoryAsSeen from '../../utils/setStoryAsSeen';
-
-interface story {
-  src: string,
-  seen: boolean
-}
+import story from '../../types/story';
 
 function Dashboard() {
   const [stories, setStories] = React.useState<story[]>(getImagesInLocal())
-  const [selectedFile, setSelectedFile] = React.useState<string>('');
+  const [selectedFile, setSelectedFile] = React.useState<number>(0);
   const [showImage, setShowImage] = React.useState(false);
-  const handleStoryClick = (src: string, i: number) => {
-    setSelectedFile(src)
+  const handleStoryClick = (i: number) => {
+    setSelectedFile(i)
     setStoryAsSeen(i)
     setStories(getImagesInLocal())
     setShowImage(true)
@@ -31,12 +27,15 @@ function Dashboard() {
             i: number) =>
             <div key={i}>
               <StoryIcon isNewStory={false} storyPhotoSrc={story.src}
-                onStoryClick={() => handleStoryClick(story.src, i)}
+                onStoryClick={() => handleStoryClick(i)}
                 seen={story.seen} />
             </div>)}
         </div>)}
       {showImage && (
-        <StoryWindow src={selectedFile} closeStory={() => setShowImage(false)} />
+        <StoryWindow stories={stories}
+          index={selectedFile}
+          sumToIndex={() => setSelectedFile(selectedFile + 1)}
+          closeStory={() => setShowImage(false)} />
       )}
     </>
   )
