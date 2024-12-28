@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './story-window.css'
 import story from '../../types/story'
+import setStoryAsSeen from '../../utils/setStoryAsSeen'
 
 interface StoryWindowProps {
   stories: story[]
@@ -11,12 +12,39 @@ interface StoryWindowProps {
 
 function StoryWindow({ stories, index, closeStory, sumToIndex }: StoryWindowProps) {
   const [barValue, setBarValue] = useState(0)
-  const [isMouseDown, setIsMouseDown] = useState(false)
+  const [holding, setHolding] = useState(false)
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isPressing = useRef(false);
+  const clickTreshold = 100
+
+  const handleMouseDown = () => {
+    isPressing.current = true
+    pressTimer.current = setTimeout(() => {
+      if (isPressing.current) setHolding(true);
+    }, clickTreshold);
+  };
+
+  const handleMouseUp = () => {
+    isPressing.current = false
+    if (holding) {
+      setHolding(false)
+    }
+    else {
+      setBarValue(100)
+    }
+  }
+
+
+  useEffect(() => {
+    if (!stories[index].seen) {
+      setStoryAsSeen(index)
+    }
+  }, [index, stories])
 
   useEffect(() => {
     const interval = setInterval(() => {
       setBarValue((prevValue) => {
-        if (isMouseDown) {
+        if (holding) {
           return prevValue
         }
         if (prevValue < 100) {
@@ -27,7 +55,7 @@ function StoryWindow({ stories, index, closeStory, sumToIndex }: StoryWindowProp
       })
     }, 10)
     return () => clearInterval(interval)
-  }, [closeStory, isMouseDown])
+  }, [closeStory, holding])
 
   useEffect(() => {
     if (barValue === 100) {
@@ -61,10 +89,10 @@ function StoryWindow({ stories, index, closeStory, sumToIndex }: StoryWindowProp
         className='imageContainer'
         src={stories[index].src}
         onContextMenu={(e) => e.preventDefault()}
-        onMouseDown={() => setIsMouseDown(true)}
-        onMouseUp={() => setIsMouseDown(false)}
-        onTouchStart={() => setIsMouseDown(true)}
-        onTouchEnd={() => setIsMouseDown(false)}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onTouchStart={handleMouseDown}
+        onTouchEnd={handleMouseUp}
       />
     </div>
   )

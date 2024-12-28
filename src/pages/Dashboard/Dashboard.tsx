@@ -3,7 +3,6 @@ import './Dashboard.css'
 import StoryIcon from '../../components/story-icon/story-icon';
 import StoryWindow from '../../components/story-window/story-window';
 import getImagesInLocal from '../../utils/getImages';
-import setStoryAsSeen from '../../utils/setStoryAsSeen';
 import story from '../../types/story';
 
 function Dashboard() {
@@ -12,9 +11,11 @@ function Dashboard() {
   const [showImage, setShowImage] = React.useState(false);
   const handleStoryClick = (i: number) => {
     setSelectedFile(i)
-    setStoryAsSeen(i)
-    setStories(getImagesInLocal())
     setShowImage(true)
+  }
+  const closeStoryWindow = () => {
+    setStories(getImagesInLocal())
+    setShowImage(false)
   }
 
   return (
@@ -35,11 +36,10 @@ function Dashboard() {
         <StoryWindow stories={stories}
           index={selectedFile}
           sumToIndex={() => setSelectedFile(selectedFile + 1)}
-          closeStory={() => setShowImage(false)} />
+          closeStory={closeStoryWindow} />
       )}
     </>
   )
 }
 
 export default Dashboard
-
